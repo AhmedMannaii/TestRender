@@ -4,6 +4,7 @@ const cors = require('cors')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 let notes = [
   {
@@ -57,6 +58,22 @@ app.get('/', (request, response) => {
     response.status(404).end()
     }
   })
+
+//put note where id matches
+  app.put('/api/notes/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const note = notes.find(note => note.id === id)
+    const body = request.body
+
+    const changedNote = {
+      content: body.content,
+      important: body.important,
+    }
+
+    notes = notes.map(note => note.id !== id ? note : changedNote)
+    response.json(changedNote)
+  })
+
 
   const generateId = () => {
     const maxId = notes.length > 0
