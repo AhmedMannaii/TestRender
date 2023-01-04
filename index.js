@@ -66,8 +66,7 @@ app.get('/', (request, response) => {
     const body = request.body
 
     const changedNote = {
-      content: body.content,
-      important: body.important,
+      ...note, important: body.important
     }
 
     notes = notes.map(note => note.id !== id ? note : changedNote)
